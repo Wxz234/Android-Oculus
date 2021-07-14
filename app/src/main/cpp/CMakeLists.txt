@@ -34,6 +34,8 @@ add_library(native-activity SHARED main.cpp)
 target_include_directories(native-activity PRIVATE
     ${ANDROID_NDK}/sources/android/native_app_glue)
 
+target_include_directories(native-activity PRIVATE include)
+
 # add lib dependencies
 target_link_libraries(native-activity
     android
