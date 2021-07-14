@@ -10,6 +10,8 @@ public:
     VRContext& operator=(const VRContext&) = delete;
     VRContext(VRContext&&) noexcept = default;
     VRContext& operator=(VRContext&&) noexcept = default;
+
+    void Init();
 private:
 };
 #endif
