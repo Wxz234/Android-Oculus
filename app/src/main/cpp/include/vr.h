@@ -11,7 +11,8 @@ public:
     VRContext(VRContext&&) noexcept = default;
     VRContext& operator=(VRContext&&) noexcept = default;
 
-    void Init();
+    void Init(void *app);
+    void LogLayersAndExtensions();
 private:
 };
 #endif
