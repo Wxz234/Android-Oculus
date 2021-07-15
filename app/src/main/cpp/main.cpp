@@ -342,6 +342,8 @@ void android_main(struct android_app* state) {
     VRContext context;
     context.Init(state);
     context.LogLayersAndExtensions();
+    context.CreateInstanceInternal(state);
+    context.LogInstanceInfo();
     return;
     while (true) {
         // Read all pending events.

@@ -1,10 +1,10 @@
 #pragma once
 #ifndef _VR_H_
 #define _VR_H_
-
+#include <openxr/openxr.h>
 class VRContext{
 public:
-    VRContext(){}
+    VRContext() :m_instance{XR_NULL_HANDLE}{ }
     ~VRContext(){}
     VRContext(const VRContext&) = delete;
     VRContext& operator=(const VRContext&) = delete;
@@ -13,7 +13,9 @@ public:
 
     void Init(void *app);
     void LogLayersAndExtensions();
-    void CreateInstanceInternal();
+    void CreateInstanceInternal(void *state);
+    void LogInstanceInfo();
 private:
+    XrInstance m_instance;
 };
 #endif

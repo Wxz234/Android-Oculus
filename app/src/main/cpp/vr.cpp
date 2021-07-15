@@ -85,7 +85,8 @@ void VRContext::LogLayersAndExtensions() {
     }
 }
 
-void VRContext::CreateInstanceInternal(){
+void VRContext::CreateInstanceInternal(void *state){
+    struct android_app* data = (struct android_app*)state;
     std::vector<const char*> extensions;
 
     // Transform platform and graphics extension std::strings to C strings.
@@ -95,5 +96,27 @@ void VRContext::CreateInstanceInternal(){
     const std::vector<std::string> graphicsExtensions = {XR_KHR_OPENGL_ES_ENABLE_EXTENSION_NAME};
     std::transform(graphicsExtensions.begin(), graphicsExtensions.end(), std::back_inserter(extensions),
                    [](const std::string& ext) { return ext.c_str(); });
+
+    XrInstanceCreateInfoAndroidKHR instanceCreateInfoAndroid;
+    instanceCreateInfoAndroid = {XR_TYPE_INSTANCE_CREATE_INFO_ANDROID_KHR};
+    instanceCreateInfoAndroid.applicationVM =  data->activity->vm;
+    instanceCreateInfoAndroid.applicationActivity = data->activity->clazz;
+    XrInstanceCreateInfo createInfo{XR_TYPE_INSTANCE_CREATE_INFO};
+    createInfo.next = (XrBaseInStructure*)&instanceCreateInfoAndroid;
+    createInfo.enabledExtensionCount = (uint32_t)extensions.size();
+    createInfo.enabledExtensionNames = extensions.data();
+
+    strcpy(createInfo.applicationInfo.applicationName, "HelloXR");
+    createInfo.applicationInfo.apiVersion = XR_CURRENT_API_VERSION;
+
+    CHECK_XRCMD(xrCreateInstance(&createInfo, &m_instance));
+    LOGW__("111222333444");
+}
+
+void VRContext::LogInstanceInfo() {
+    XrInstanceProperties instanceProperties{XR_TYPE_INSTANCE_PROPERTIES};
+    CHECK_XRCMD(xrGetInstanceProperties(m_instance, &instanceProperties));
+    LOGI__("Instance RuntimeName=%s RuntimeVersion=%s", instanceProperties.runtimeName,GetXrVersionString(instanceProperties.runtimeVersion).c_str());
+
 }
 
