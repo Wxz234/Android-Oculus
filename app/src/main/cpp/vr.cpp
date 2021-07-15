@@ -9,13 +9,13 @@
 #include <GLES/gl.h>
 #include <openxr/openxr.h>
 #include <openxr/openxr_platform.h>
-
-
 #include <android_native_app_glue.h>
-
 #include <cstdint>
 #include <vector>
 #include <string>
+#include <algorithm>
+#include <iterator>
+
 void CHECK_XRCMD(XrResult xr){
     if(xr!=XR_SUCCESS){
         throw;
@@ -86,6 +86,14 @@ void VRContext::LogLayersAndExtensions() {
 }
 
 void VRContext::CreateInstanceInternal(){
+    std::vector<const char*> extensions;
 
+    // Transform platform and graphics extension std::strings to C strings.
+    const std::vector<std::string> platformExtensions = {XR_KHR_ANDROID_CREATE_INSTANCE_EXTENSION_NAME};
+    std::transform(platformExtensions.begin(), platformExtensions.end(), std::back_inserter(extensions),
+                   [](const std::string& ext) { return ext.c_str(); });
+    const std::vector<std::string> graphicsExtensions = {XR_KHR_OPENGL_ES_ENABLE_EXTENSION_NAME};
+    std::transform(graphicsExtensions.begin(), graphicsExtensions.end(), std::back_inserter(extensions),
+                   [](const std::string& ext) { return ext.c_str(); });
 }
 
