@@ -341,7 +341,8 @@ void android_main(struct android_app* state) {
     // loop waiting for stuff to do.
     VRContext context;
     context.Init(state);
-
+    context.LogLayersAndExtensions();
+    return;
     while (true) {
         // Read all pending events.
         int ident;

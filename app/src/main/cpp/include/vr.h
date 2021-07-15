@@ -13,6 +13,7 @@ public:
 
     void Init(void *app);
     void LogLayersAndExtensions();
+    void CreateInstanceInternal();
 private:
 };
 #endif
